@@ -1,0 +1,56 @@
+{
+  "entities": {
+    "Article": {
+      "title": "Article",
+      "description": "A news article or review about games, movies, or series.",
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "The title of the article."
+        },
+        "slug": {
+          "type": "string",
+          "description": "URL-friendly version of the title."
+        },
+        "content": {
+          "type": "string",
+          "description": "The markdown content of the article."
+        },
+        "excerpt": {
+          "type": "string",
+          "description": "A short summary of the article."
+        },
+        "category": {
+          "type": "string",
+          "enum": ["games", "movies", "series"],
+          "description": "The category of the article."
+        },
+        "authorName": {
+          "type": "string",
+          "description": "The display name of the author."
+        },
+        "authorUid": {
+          "type": "string",
+          "description": "The Firebase Auth UID of the author."
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "URL of the cover image."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the article was published."
+        }
+      },
+      "required": ["title", "slug", "content", "category", "authorName", "authorUid", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/articles": {
+      "schema": "Article",
+      "description": "Collection of articles."
+    }
+  }
+}
