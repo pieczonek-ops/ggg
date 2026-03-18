@@ -1,17 +1,37 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Article } from '../types';
 import { motion } from 'motion/react';
 import Markdown from 'react-markdown';
-import { ArrowLeft, Calendar, User, Share2, Bookmark } from 'lucide-react';
+import { ArrowLeft, Calendar, User, Share2, Bookmark, Loader2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { pl } from 'date-fns/locale';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import { SEO } from './SEO';
 
 interface ArticleDetailProps {
-  article: Article;
-  onBack: () => void;
+  articles: Article[];
 }
 
-export function ArticleDetail({ article, onBack }: ArticleDetailProps) {
+export function ArticleDetail({ articles }: ArticleDetailProps) {
+  const { slug } = useParams<{ slug: string }>();
+  const navigate = useNavigate();
+  const [article, setArticle] = useState<Article | null>(null);
+
+  useEffect(() => {
+    const found = articles.find(a => a.slug === slug);
+    if (found) {
+      setArticle(found);
+    }
+  }, [slug, articles]);
+
+  if (!article) {
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <Loader2 className="w-8 h-8 text-emerald-500 animate-spin" />
+      </div>
+    );
+  }
+
   const date = article.createdAt?.toDate ? article.createdAt.toDate() : new Date();
 
   return (
@@ -21,13 +41,21 @@ export function ArticleDetail({ article, onBack }: ArticleDetailProps) {
       exit={{ opacity: 0 }}
       className="max-w-4xl mx-auto"
     >
-      <button
-        onClick={onBack}
+      <SEO 
+        title={article.title} 
+        description={article.excerpt || article.content.substring(0, 160)} 
+        image={article.imageUrl}
+        article={true}
+        slug={article.slug}
+      />
+
+      <Link
+        to="/"
         className="flex items-center gap-2 text-zinc-500 hover:text-zinc-200 transition-colors mb-12 group"
       >
         <ArrowLeft className="w-5 h-5 transition-transform group-hover:-translate-x-1" />
         Wróć do listy
-      </button>
+      </Link>
 
       <header className="mb-12">
         <div className="flex items-center gap-3 mb-6">

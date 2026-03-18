@@ -5,19 +5,22 @@ import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { Category } from '../types';
 import { motion } from 'motion/react';
 import { X, Send, Image as ImageIcon, Type, AlignLeft, Hash } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 interface EditorProps {
   user: User;
-  onClose: () => void;
 }
 
-export function Editor({ user, onClose }: EditorProps) {
+export function Editor({ user }: EditorProps) {
+  const navigate = useNavigate();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [excerpt, setExcerpt] = useState('');
   const [category, setCategory] = useState<Category>('games');
   const [imageUrl, setImageUrl] = useState('');
   const [submitting, setSubmitting] = useState(false);
+
+  const onClose = () => navigate('/');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
